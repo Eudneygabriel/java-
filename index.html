@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentário sobre Java</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Documentário sobre Java</h1>
+      <nav>
+        <ul>
+          <li><a href="#fluxos">Fluxos de Dados</a></li>
+          <li><a href="#arquivos">Leitura e Escrita de Arquivos</a></li>
+          <li><a href="#serializacao">Serialização de Objetos</a></li>
+          <li><a href="#excecoes">Tratamento de Exceções</a></li>
+          <li><a href="#banco-dados">Banco de Dados</a></li>
+          <li><a href="#concorrencia">Concorrência</a></li>
+          <li><a href="#desempenho">Desempenho e Escalabilidade</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="fluxos">
+        <h2>Fluxos de Dados</h2>
+        <p>
+          Em Java, o pacote <code>java.io</code> oferece uma abstração de fluxo
+          de dados. Fluxos são responsáveis por ler e escrever dados de diversas
+          fontes, como arquivos, memória e redes.
+        </p>
+        <p>
+          Os fluxos podem ser de dois tipos: fluxos de bytes e fluxos de
+          caracteres. Fluxos de bytes são usados para manipular dados binários,
+          enquanto fluxos de caracteres são usados para manipular dados
+          textuais.
+        </p>
+
+        <h3>Fluxos de Entrada e Saída</h3>
+        <p>
+          Fluxos de entrada são responsáveis por ler dados, enquanto fluxos de
+          saída escrevem dados. Os fluxos mais comuns são:
+        </p>
+        <ul>
+          <li><code>InputStream</code> (entrada de dados em bytes)</li>
+          <li><code>OutputStream</code> (saída de dados em bytes)</li>
+          <li><code>Reader</code> (entrada de dados em caracteres)</li>
+          <li><code>Writer</code> (saída de dados em caracteres)</li>
+        </ul>
+
+        <h3>Fluxos Encadeados</h3>
+        <p>
+          Você pode encadear fluxos para otimizar a leitura e a escrita de
+          dados. Por exemplo, você pode usar <code>BufferedReader</code> para
+          ler dados com mais eficiência.
+        </p>
+        <pre><code>BufferedReader br = new BufferedReader(new FileReader("exemplo.txt"));</code></pre>
+      </section>
+
+      <section id="arquivos">
+        <h2>Leitura e Escrita de Arquivos</h2>
+        <p>
+          Trabalhar com arquivos é uma tarefa comum em Java. Para isso,
+          utilizamos fluxos para ler e escrever dados. O pacote
+          <code>java.io</code> contém várias classes úteis para esse propósito.
+        </p>
+
+        <h3>Leitura de Arquivos</h3>
+        <p>
+          Para ler dados de um arquivo, podemos usar o <code>FileReader</code>,
+          que é ideal para ler caracteres. Para otimizar a leitura, usamos o
+          <code>BufferedReader</code>.
+        </p>
+        <pre><code>BufferedReader reader = new BufferedReader(new FileReader("arquivo.txt"));</code></pre>
+        <p>
+          Esse código cria um objeto <code>BufferedReader</code> que pode ler o
+          conteúdo do arquivo de forma mais eficiente.
+        </p>
+
+        <h3>Escrita em Arquivos</h3>
+        <p>
+          Para escrever em arquivos, usamos o <code>FileWriter</code> ou o
+          <code>BufferedWriter</code>, que oferece mais eficiência ao escrever
+          grandes quantidades de dados.
+        </p>
+        <pre><code>BufferedWriter writer = new BufferedWriter(new FileWriter("saida.txt"));</code></pre>
+
+        <h3>Fechando Fluxos</h3>
+        <p>
+          Fechar os fluxos após o uso é essencial para evitar vazamentos de
+          recursos. Usamos o <code>try-with-resources</code> para garantir o
+          fechamento automático dos fluxos.
+        </p>
+        <pre><code>try (BufferedReader br = new BufferedReader(new FileReader("arquivo.txt"))) {
+    // Lógica de leitura
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+      </section>
+
+      <section id="serializacao">
+        <h2>Serialização de Objetos</h2>
+        <p>
+          A serialização é o processo de transformar um objeto em uma sequência
+          de bytes. Isso é útil para salvar o estado de um objeto em disco ou
+          enviá-lo por rede.
+        </p>
+        <p>
+          Em Java, um objeto precisa implementar a interface
+          <code>Serializable</code> para ser serializado.
+        </p>
+
+        <h3>Exemplo de Serialização</h3>
+        <p>Veja um exemplo básico de serialização:</p>
+        <pre><code>import java.io.*;
+
+public class ExemploSerializacao {
+    public static void main(String[] args) throws IOException {
+        Person p = new Person("João", 30);
+
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("pessoa.ser"))) {
+            oos.writeObject(p);
+        }
+    }
+}
+
+class Person implements Serializable {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}</code></pre>
+
+        <h3>Deserialização</h3>
+        <p>
+          Para deserializar um objeto, usamos <code>ObjectInputStream</code>:
+        </p>
+        <pre><code>try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("pessoa.ser"))) {
+    Person p = (Person) ois.readObject();
+    System.out.println(p.name + " - " + p.age);
+} catch (IOException | ClassNotFoundException e) {
+    e.printStackTrace();
+}</code></pre>
+      </section>
+
+      <section id="excecoes">
+        <h2>Tratamento de Exceções</h2>
+        <p>
+          Exceções são eventos que interrompem o fluxo normal de um programa.
+          Elas podem ser previstas ou imprevistas.
+        </p>
+        <p>Existem dois tipos de exceções: verificadas e não verificadas.</p>
+
+        <h3>Exceções Verificadas</h3>
+        <p>
+          Exceções verificadas, como <code>IOException</code>, devem ser
+          tratadas explicitamente, ou então o compilador gera um erro.
+        </p>
+
+        <h3>Exceções Não Verificadas</h3>
+        <p>
+          Exceções não verificadas, como <code>NullPointerException</code>, não
+          exigem tratamento obrigatório, mas devem ser tratadas para evitar
+          falhas inesperadas.
+        </p>
+
+        <h3>Blocos try-catch</h3>
+        <p>
+          O bloco <code>try-catch</code> é usado para capturar e tratar
+          exceções:
+        </p>
+        <pre><code>try {
+    int resultado = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Erro de divisão por zero!");
+} finally {
+    System.out.println("Bloco finally executado");
+}</code></pre>
+      </section>
+
+      <section id="banco-dados">
+        <h2>Banco de Dados</h2>
+        <p>
+          Java tem uma API chamada JDBC (Java Database Connectivity) para
+          interagir com bancos de dados relacionais.
+        </p>
+        <p>
+          Para realizar operações como consultas e atualizações, usamos objetos
+          como <code>Connection</code>, <code>Statement</code> e
+          <code>ResultSet</code>.
+        </p>
+
+        <h3>Exemplo de Conexão JDBC</h3>
+        <p>Conectar a um banco de dados MySQL:</p>
+        <pre><code>import java.sql.*;
+
+public class ExemploJDBC {
+    public static void main(String[] args) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/meubanco", "usuario", "senha");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM clientes");
+
+        while (rs.next()) {
+            System.out.println(rs.getString("nome"));
+        }
+
+        conn.close();
+    }
+}</code></pre>
+      </section>
+
+      <section id="concorrencia">
+        <h2>Concorrência</h2>
+        <p>
+          A concorrência é importante em sistemas que necessitam de alto
+          desempenho. O Java fornece suporte para criar e gerenciar threads e
+          processos simultâneos.
+        </p>
+        <p>
+          A classe <code>Thread</code> é a base para a criação de threads em
+          Java, e o pacote <code>java.util.concurrent</code> oferece classes
+          avançadas para controle de threads.
+        </p>
+
+        <h3>Exemplo de Thread</h3>
+        <pre><code>class MinhaThread extends Thread {
+    public void run() {
+        System.out.println("Executando thread...");
+    }
+}
+
+public class ExemploThread {
+    public static void main(String[] args) {
+        MinhaThread t = new MinhaThread();
+        t.start();
+    }
+}</code></pre>
+      </section>
+
+      <section id="desempenho">
+        <h2>Desempenho e Escalabilidade</h2>
+        <p>
+          O desempenho é uma característica fundamental de qualquer sistema. No
+          Java, é importante otimizar o código para reduzir o tempo de execução
+          e o uso de recursos.
+        </p>
+        <p>
+          O conceito de escalabilidade se refere à capacidade de um sistema de
+          lidar com um aumento na carga de trabalho, sem perder desempenho.
+        </p>
+
+        <h3>Melhorando o Desempenho</h3>
+        <p>
+          Algumas práticas incluem o uso de caches, a otimização de algoritmos e
+          a utilização de múltiplas threads para processar dados em paralelo.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Documentário sobre Java.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
